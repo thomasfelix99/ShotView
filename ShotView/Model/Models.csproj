@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<AssemblyTitle>Tf.ShotView.Models</AssemblyTitle>
+	  <AssemblyName>Tf.ShotView.Models</AssemblyName>
+	  <RootNamespace>Tf.ShotView.Models</RootNamespace>
+	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+	  <Description>Models for the ShotView</Description>
+	  <Company>TF</Company>
+	  <Product>ShotView</Product>
+	  <Copyright>Copyright (C) 2024 by Thomas Felix</Copyright>
+  </PropertyGroup>
+
+</Project>
