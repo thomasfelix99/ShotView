@@ -19,8 +19,12 @@
         />-->
 
         <Viewbox
+            Stretch="UniformToFill"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Height="{Binding Scale}" 
+            Width="{Binding Scale}" 
             >
-
             <Canvas
                 Height="500" 
                 Width ="500"

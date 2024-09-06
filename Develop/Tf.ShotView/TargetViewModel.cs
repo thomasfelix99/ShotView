@@ -7,7 +7,12 @@ namespace Tf.ShotView;
 public partial class TargetViewModel
 {
     [ObservableProperty] public int number;
-    [ObservableProperty] public double score;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Scale))]
+    [NotifyPropertyChangedFor(nameof(ShotVisibility))]
+    public double score = double.NaN;
+    
     [ObservableProperty] public double shotSize = 45;
 
     [ObservableProperty]
@@ -24,5 +29,27 @@ public partial class TargetViewModel
     public double ShotLeft => X + 250 - ShotSize / 2;
     public double ShotTop => Y + 250 - ShotSize / 2;
 
-    public System.Windows.Visibility ShotVisibility => ShowShot ? Visibility.Visible : Visibility.Hidden;
+    public Visibility ShotVisibility => CalcShotVisibility();
+
+    public int Scale => CalcScale();
+
+    private Visibility CalcShotVisibility()
+    {
+        if (double.IsNaN(Score)) return Visibility.Hidden;
+
+        return ShowShot ? Visibility.Visible : Visibility.Hidden;
+    }
+
+    private int CalcScale()
+    {
+        if (double.IsNaN(Score)) return 500;
+
+        if (Score >= 9) return 1800;
+
+        if (Score >= 7) return 1000;
+
+        if (Score >= 5) return 800;
+
+        return 500;
+    }
 }
