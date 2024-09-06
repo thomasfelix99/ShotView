@@ -28,7 +28,7 @@ internal class RawShot
     public int BahnNr { get; set; }
 
     [Description("Ringzahl(1.0 bis 10.9 oder 1 bis 10)")]
-    public double SecondaryScore { get; set; } 
+    public double SecondaryScore { get; set; }
 
     [Description("Anz. 100stel mm vom Zentrum entfernt")]
     public int Teiler { get; set; }
@@ -36,14 +36,14 @@ internal class RawShot
     [Description("Zeit des Schusses(HH:MM:SS)")]
     public DateTime Zeit { get; set; }
 
-    [Description("1=Mouche, 0=keine Mouche")] 
+    [Description("1=Mouche, 0=keine Mouche")]
     public int Mouche { get; set; }
-    
+
     [Description("X-Koordinate in mm(allenfalls mit neg.Vorzeichen)")]
-    public double X { get; set; } 
+    public double X { get; set; }
 
     [Description("Y-Koordinate in mm(allenfalls mit neg.Vorzeichen)")]
-    public double Y { get; set; } 
+    public double Y { get; set; }
 
     [Description("1=innerhalb des gültigen Zeitrahmens, 0=ausserhalb")]
     public int InTime { get; set; }
@@ -82,20 +82,20 @@ internal class RawShot
     public int LogTyp { get; set; }
 
     [Description("99999999 Zeit seit Anfangs Jahr in Hundertstel-Sekunden")]
-    public long TimeStamp { get; set; } 
+    public long TimeStamp { get; set; }
 
     [Description("Aktuelle Ablösung")]
-    public int Ablösung { get; set; } 
+    public int Ablösung { get; set; }
 
     [Description("0:Waffentyp aus, 1-21:verschiedene Waffentypen")]
     public int Waffe { get; set; } //
 
     [Description("0:Position aus, 1:liegend, 2:stehend, 3:knieend, 4 liegend aufgelegt")]
-    public int Position { get; set; } 
+    public int Position { get; set; }
 
     [Description("FF:undefiniert, alle anderen Nummern ensprechen der Definition in der Datei \"target.ini\"")]
     public string? TargetID { get; set; }
 
     [Description("Externe Nummer, mit welcher ein Benutzerstich identifiziert werden kann")]
-    public string? ExterneNummer { get; set; } 
+    public string? ExterneNummer { get; set; }
 }
