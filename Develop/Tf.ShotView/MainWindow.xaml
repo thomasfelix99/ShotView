@@ -5,19 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:shotView="clr-namespace:Tf.ShotView"
         mc:Ignorable="d"
-        Title="Main Window" Height="450" Width="800">
+        Title="Main Window" Height="800" Width="800">
     <Window.DataContext>
         <shotView:MainWindowViewModel />
     </Window.DataContext>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <ScrollViewer Grid.Row="0"
+    <StackPanel Orientation="Vertical">
+        <!--<ScrollViewer Grid.Row="0"
                       HorizontalScrollBarVisibility="Auto" 
                       VerticalScrollBarVisibility="Disabled">
 
@@ -35,13 +29,94 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
+        </ScrollViewer>-->
 
-        <Button Grid.Row="1" 
-                Content="Refresh" 
+        <StackPanel Orientation="Horizontal">
+            <Button
+                Padding="20"
+                Margin="20"
+                Content="Add" 
+                Command="{Binding AddTimeTextCommand}" 
+            />
+            <Button
+                Padding="20"
+                Margin="20"
+                Content="Update" 
                 Command="{Binding UpdateTimeTextCommand}" 
-        />
+            />
+        </StackPanel>
 
+
+
+        <!--<ScrollViewer
+            HorizontalScrollBarVisibility="Auto" 
+            VerticalScrollBarVisibility="Disabled">
+
+            <ItemsControl 
+                ItemsSource="{Binding Targets}"
+                >
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <shotView:Target 
+                            Margin="10"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="200"
+                            Height="200"
+                            DataContext="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+
+        </ScrollViewer>-->
+
+        <shotView:Target
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Width="500"
+            Height="500"
+            DataContext="{Binding Target1 }" />
+
+        <Label 
+            FontSize="30" 
+            Content="{Binding Target1.Score}" 
+            ContentStringFormat="F1"
+            />
+
+        <!--<ScrollViewer
+            HorizontalScrollBarVisibility="Auto" 
+            VerticalScrollBarVisibility="Disabled">
+
+            <ItemsControl 
+                ItemsSource="{Binding Shooters}"
+                >
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Name}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+
+        </ScrollViewer>-->
+
+        
+        
         <!--<ListView Grid.Row="2" ItemsSource="{Binding Shooters}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -50,13 +125,16 @@
             </ListView.ItemTemplate>
         </ListView>-->
 
-        <ListView Grid.Row="2" ItemsSource="{Binding Targets}">
+        <!--<ListView
+            ItemsSource="{Binding Targets}">
+            
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <shotView:Target DataContext="{Binding }" />
+                    <Label Content="{Binding Score}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>
 
-    </Grid>
+        </ListView>-->
+
+    </StackPanel>
 </Window>
