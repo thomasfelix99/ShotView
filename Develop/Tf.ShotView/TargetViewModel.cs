@@ -1,55 +1,109 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Windows;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Tf.ShotView;
 
-[INotifyPropertyChanged]
-public partial class TargetViewModel
+public partial class TargetViewModel : ObservableObject
 {
-    [ObservableProperty] public int number;
+    public TargetViewModel()
+    {
+        Shots = new ObservableCollection<ShotViewModel>();
+
+        Shots.CollectionChanged += ShotsOnCollectionChanged;
+    }
+
+    private static void RunInDispacher(Action action)
+    {
+        if (Application.Current.Dispatcher.CheckAccess())
+        {
+            action.Invoke();
+        }
+        else
+        {
+            Application.Current.Dispatcher.Invoke(action.Invoke);
+        }
+    }
+
+    private void ShotsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems != null)
+        {
+            foreach (ShotViewModel newItem in e.NewItems)
+            {
+                newItem.ShotChanged += OnShotChanged;
+            }
+        }
+
+        if (e.OldItems != null)
+        {
+            foreach (ShotViewModel oldItem in e.OldItems)
+            {
+                oldItem.ShotChanged -= OnShotChanged;
+            }
+        }
+    }
+
+    protected void OnShotChanged(object? sender, EventArgs e)
+    {
+        if (sender is ShotViewModel shot)
+        {
+            shot.Scale = Scale;
+        }
+        
+        OnPropertyChanged(nameof(Scale));
+    }
+
+    [ObservableProperty]
+    public int targetNumber;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Scale))]
-    [NotifyPropertyChangedFor(nameof(ShotVisibility))]
-    public double score = double.NaN;
-    
-    [ObservableProperty] public double shotSize = 45;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ShotVisibility))]
-    public bool showShot = true;
-    
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ShotLeft))]
-    public double x;
-
-    [NotifyPropertyChangedFor(nameof(ShotTop))]
-    [ObservableProperty] public double y;
-
-    public double ShotLeft => X + 250 - ShotSize / 2;
-    public double ShotTop => Y + 250 - ShotSize / 2;
-
-    public Visibility ShotVisibility => CalcShotVisibility();
+    public ObservableCollection<ShotViewModel>? shots;
 
     public int Scale => CalcScale();
 
-    private Visibility CalcShotVisibility()
-    {
-        if (double.IsNaN(Score)) return Visibility.Hidden;
-
-        return ShowShot ? Visibility.Visible : Visibility.Hidden;
-    }
-
     private int CalcScale()
     {
-        if (double.IsNaN(Score)) return 500;
+        if (Shots == null)
+            return 500;
 
-        if (Score >= 9) return 1800;
+        if (Shots.Count == 0)
+            return 500;
 
-        if (Score >= 7) return 1000;
+        if (Shots.Min(s => s.Score) >= 9) return 1800;
 
-        if (Score >= 5) return 800;
+        if (Shots.Min(s => s.Score) >= 7) return 1300;
+
+        if (Shots.Min(s => s.Score) >= 5) return 800;
 
         return 500;
     }
+
+    private ShotViewModel InitialShot(int number)
+    {
+        return new ShotViewModel()
+        {
+            Number = number,
+            Score = double.NaN,
+            ShotColor = Colors.White,
+            ShotBoarderColor = Colors.Black,
+            ShotBoarder = 1.0
+        };
+    }
+
+    public void AddShot(double score, double x, double y)
+    {
+        RunInDispacher(() =>
+        {
+            var shot = InitialShot(Shots!.Count + 1);
+            shot.Score = score;
+            shot.X = x;
+            shot.Y = y;
+            Shots.Add(shot);
+        });
+    }
+
 }

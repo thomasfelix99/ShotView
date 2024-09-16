@@ -24,4 +24,13 @@
 		<ProjectReference Include="..\Tf.ShotView.Models\Tf.ShotView.Models.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="ShotsControl.xaml.cs">
+	    <SubType>Code</SubType>
+	  </Compile>
+	  <Compile Update="TargetControl.xaml.cs">
+	    <SubType>Code</SubType>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

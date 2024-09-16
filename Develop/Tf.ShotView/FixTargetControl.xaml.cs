@@ -5,9 +5,9 @@ namespace Tf.ShotView
     /// <summary>
     /// Interaktionslogik für Target.xaml
     /// </summary>
-    public partial class Target : UserControl
+    public partial class FixTargetControl : UserControl
     {
-        public Target()
+        public FixTargetControl()
         {
             InitializeComponent();
         }

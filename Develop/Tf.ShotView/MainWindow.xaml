@@ -11,25 +11,6 @@
     </Window.DataContext>
 
     <StackPanel Orientation="Vertical">
-        <!--<ScrollViewer Grid.Row="0"
-                      HorizontalScrollBarVisibility="Auto" 
-                      VerticalScrollBarVisibility="Disabled">
-
-            <ItemsControl ItemsSource="{Binding Targets}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <shotView:Target 
-                            DataContext="{Binding}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>-->
 
         <StackPanel Orientation="Horizontal">
             <Button
@@ -44,9 +25,13 @@
                 Content="Update" 
                 Command="{Binding UpdateTimeTextCommand}" 
             />
+            <Button
+                Padding="20"
+                Margin="20"
+                Content="Clear" 
+                Command="{Binding ClearShotsCommand}" 
+            />
         </StackPanel>
-
-
 
         <!--<ScrollViewer
             HorizontalScrollBarVisibility="Auto" 
@@ -64,12 +49,10 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <shotView:Target 
+                        <shotView:TargetControl 
                             Margin="10"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Width="200"
-                            Height="200"
                             DataContext="{Binding}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -78,67 +61,21 @@
 
         </ScrollViewer>-->
 
-        <shotView:Target
+        <shotView:TargetControl
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Width="500"
-            Height="500"
+            Width="766"
+            Height="484"
             DataContext="{Binding Target1 }" />
 
         <Label 
-            Width="500"
+            Width="700"
             FontSize="90"
             FontWeight="Bold"
             HorizontalAlignment="Left"
             HorizontalContentAlignment="Center"
-            Content="{Binding Target1.Score}" 
+            Content="{Binding Target1Score}" 
             ContentStringFormat="F1"
             />
-
-        <!--<ScrollViewer
-            HorizontalScrollBarVisibility="Auto" 
-            VerticalScrollBarVisibility="Disabled">
-
-            <ItemsControl 
-                ItemsSource="{Binding Shooters}"
-                >
-
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding Name}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-
-            </ItemsControl>
-
-        </ScrollViewer>-->
-
-        
-        
-        <!--<ListView Grid.Row="2" ItemsSource="{Binding Shooters}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding Name}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
-
-        <!--<ListView
-            ItemsSource="{Binding Targets}">
-            
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding Score}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-
-        </ListView>-->
 
     </StackPanel>
 </Window>
