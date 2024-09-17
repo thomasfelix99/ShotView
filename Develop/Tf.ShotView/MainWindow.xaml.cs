@@ -11,4 +11,13 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
+    private MainWindowViewModel? _viewModel => DataContext as MainWindowViewModel;
+
+    public void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (_viewModel?.Target1 != null)
+        {
+            _viewModel.Target1.ManualScale = e.NewValue / 10;
+        }
+    }
 }

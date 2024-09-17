@@ -140,38 +140,22 @@ public partial class MainWindowViewModel : ObservableObject
         }
         
         int tNr = shots[idx].TargetNr - 1;
-        //Target1.AddShot(shots[idx].Score, shots[idx].X * 10, shots[idx].Y * 10);
-        Target1.AddShot( 10.9, 0, 0);
+        //        Target1.AddShot(shots[idx].Score, shots[idx].X * 10, shots[idx].Y * 10);
 
 
-        //for (int i = 0; i < 2000; i++)
-        //{
-        //    await Task.Run(() =>
-        //    {
-        //        double rX = rnd.Next(-200000, 200000) / 10000;
-        //        double rY = rnd.Next(-200000, 200000) / 10000;
+        for (int i = 0; i < 20; i++)
+        {
+            await Task.Run(() =>
+            {
+                double rX = rnd.Next(-200000, 200000) / 10000;
+                double rY = rnd.Next(-200000, 200000) / 10000;
 
-        //        Target1.AddShot(0, rX * 10, rY * 10);
-        //    });
-        //}
-        //Targets[tNr].AddShot(shots[idx].Score, shots[idx].X * 10, shots[idx].Y * 10);
-
-        //Target1.SetFirstShot(shots[idx].Score, shots[idx].X * 10, shots[idx].Y * 10);
-        //Target1.AddShot(shots[idx].Score, shots[idx].X * 10, shots[idx].Y * 10);
-
-        //foreach (var t in Targets)
-        //{
-        //    t.Score += 1;
-        //}
-
-
-        //if (Shooters.Count > 0)
-        //{
-        //    Shooters[0].Name = $"- {Shooters[0].Name}";
-        //}
+                Target1.AddShot(0, rX * 10, rY * 10);
+            });
+        }
+        Targets[tNr].AddShot(shots[idx].Score, shots[idx].X * 10, shots[idx].Y * 10);
     }
 
 
     public double Target1Score => 0.0;
-
 }

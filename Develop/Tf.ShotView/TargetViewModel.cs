@@ -8,11 +8,91 @@ namespace Tf.ShotView;
 
 public partial class TargetViewModel : ObservableObject
 {
+    [NotifyPropertyChangedFor(nameof(TargetBackground))]
+    [ObservableProperty] public Color backgroundColor;
+
+    [ObservableProperty] public int targetNumber;
+
+    [ObservableProperty] public ObservableCollection<ShotViewModel>? shots;
+
+    [ObservableProperty] public ObservableCollection<RingViewModel>? rings;
+
+    [NotifyPropertyChangedFor(nameof(CenterX))]
+    [ObservableProperty] public double targetActualWidth;
+
+    [NotifyPropertyChangedFor(nameof(CenterY))]
+    [ObservableProperty] public double targetActualHeight;
+
+    [NotifyPropertyChangedFor(nameof(CenterX))]
+    [NotifyPropertyChangedFor(nameof(CenterY))]
+    [NotifyPropertyChangedFor(nameof(Scale))]
+    [ObservableProperty] public double manualScale;
+
+    [NotifyPropertyChangedFor(nameof(Scale))]
+    [ObservableProperty] public bool autoScale;
+
+    public double CenterX => TargetActualWidth / 2;
+    public double CenterY => TargetActualHeight / 2;
+    public double Scale => AutoScale ? ScaleFromShots() : ManualScale;
+
+    private const double KaliberG10 = 4.5;
+
     public TargetViewModel()
     {
-        Shots = new ObservableCollection<ShotViewModel>();
+        InitializeTarget();
+        InitializeRings();
+        InitializeShots();
+    }
 
+    public Brush TargetBackground => new SolidColorBrush(BackgroundColor);
+    
+    private void InitializeTarget()
+    {
+        BackgroundColor = Colors.LightYellow;
+        TargetNumber = 0;
+        ManualScale = 1;
+        AutoScale = false;
+    }
+
+    private void InitializeRings()
+    {
+        Rings = new ObservableCollection<RingViewModel>();
+        
+        for (int score = 1; score <= 10; score++)
+        {
+            Rings.Add(new RingViewModel()
+            {
+                Score = score
+            });
+        }
+    }
+
+    private void InitializeShots()
+    {
+        Shots = new ObservableCollection<ShotViewModel>();
         Shots.CollectionChanged += ShotsOnCollectionChanged;
+    }
+
+    private double Factor => double.Min(TargetActualHeight, TargetActualWidth) / 50;
+    
+    private void SetRingG10(RingViewModel ring)
+    {
+        double ringDiameter = 45.5 - 5 * (ring.Score - 1);
+
+        ring.BackgroundColor = ring.Score is < 4 or 10 ? Colors.White : Colors.Black;
+        ring.RingColor = ring.Score is < 4 or 10 ? Colors.Black : Colors.White;
+
+        ring.RingSize = ringDiameter * Factor;
+        ring.RingStrokeThickness = ring.Score < 10 ? 0.2 * Factor : 0;
+
+        ring.RingLeft = (TargetActualWidth - ring.RingSize) / 2;
+        ring.RingTop = (TargetActualHeight - ring.RingSize) / 2;
+    }
+
+    private void SetShotG10(ShotViewModel shot)
+    {
+        shot.ShotLeft = TargetActualWidth / 2 + shot.X - shot.ShotSize / 2;
+        shot.ShotTop = TargetActualHeight / 2 + shot.Y - shot.ShotSize / 2;
     }
 
     private static void RunInDispacher(Action action)
@@ -29,79 +109,70 @@ public partial class TargetViewModel : ObservableObject
 
     private void ShotsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.NewItems != null)
-        {
-            foreach (ShotViewModel newItem in e.NewItems)
-            {
-                newItem.ShotChanged += OnShotChanged;
-            }
-        }
-
-        if (e.OldItems != null)
-        {
-            foreach (ShotViewModel oldItem in e.OldItems)
-            {
-                oldItem.ShotChanged -= OnShotChanged;
-            }
-        }
-    }
-
-    protected void OnShotChanged(object? sender, EventArgs e)
-    {
-        if (sender is ShotViewModel shot)
-        {
-            shot.Scale = Scale;
-        }
-        
         OnPropertyChanged(nameof(Scale));
     }
 
-    [ObservableProperty]
-    public int targetNumber;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Scale))]
-    public ObservableCollection<ShotViewModel>? shots;
-
-    public int Scale => CalcScale();
-
-    private int CalcScale()
+    private double ScaleFromShots()
     {
-        if (Shots == null)
-            return 500;
-
-        if (Shots.Count == 0)
-            return 500;
-
-        if (Shots.Min(s => s.Score) >= 9) return 1800;
-
-        if (Shots.Min(s => s.Score) >= 7) return 1300;
-
-        if (Shots.Min(s => s.Score) >= 5) return 800;
-
-        return 500;
-    }
-
-    private ShotViewModel InitialShot(int number)
-    {
-        return new ShotViewModel()
+        if (Shots?.Count > 0)
         {
-            Number = number,
-            Score = double.NaN,
-            ShotColor = Colors.White,
-            ShotBoarderColor = Colors.Black,
-            ShotBoarder = 1.0
-        };
-    }
+            if (Shots?.Min(s => s.Score) >= 9)
+            {
+                return 2;
+            }
 
+            if (Shots?.Min(s => s.Score) >= 7)
+            {
+                return 1.5;
+            }
+
+            if (Shots?.Min(s => s.Score) >= 5)
+            {
+                return 1.2;
+            }
+
+        }
+        return 1;
+    }
+    public void TargetSizeChanged(double actualWidth, double actualHeight)
+    {
+        TargetActualWidth = actualWidth;
+        TargetActualHeight = actualHeight;
+
+        if (Rings != null)
+        {
+            foreach (RingViewModel ring in Rings)
+            {
+                SetRingG10(ring);
+            }
+        }
+
+        if (Shots != null)
+        {
+            foreach (ShotViewModel shot in Shots)
+            {
+                SetShotG10(shot);
+            }
+        }
+    }
+    
     public void AddShot(double score, double x, double y)
     {
         RunInDispacher(() =>
         {
-            var shot = InitialShot(Shots!.Count + 1);
-            shot.Score = score;
-            shot.X = x;
-            shot.Y = y;
+            ShotViewModel shot = new ShotViewModel()
+            {
+                Number = Shots!.Count + 1,
+                ShotColor = Colors.White,
+                ShotBoarderColor = Colors.Black,
+                ShotBoarderThickness = 1,
+                Score = score,
+                X = x,
+                Y = y,
+                ShotSize = KaliberG10 * 10,
+                ShowShot = true
+            };
+            SetShotG10(shot);
             Shots.Add(shot);
         });
     }

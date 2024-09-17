@@ -8,67 +8,46 @@ public partial class ShotViewModel : ObservableObject
 {
     public EventHandler? ShotChanged;
 
-    [ObservableProperty] public double shotSize = 45;
-    
+    [NotifyPropertyChangedFor(nameof(ShotZIndex))]
     [ObservableProperty] public int number;
 
     [NotifyPropertyChangedFor(nameof(ShotFill))]
-    [ObservableProperty] public Color shotColor = Colors.White;
+    [ObservableProperty] public Color shotColor;
 
-    [NotifyPropertyChangedFor(nameof(ShotStrokeThickness))]
-    [ObservableProperty] public double shotBoarder = 1;
+    [ObservableProperty] public double shotBoarderThickness;
 
     [NotifyPropertyChangedFor(nameof(ShotStroke))]
-    [ObservableProperty] public Color shotBoarderColor = Colors.Black;
+    [ObservableProperty] public Color shotBoarderColor;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShotVisibility))]
-    public double score = double.NaN;
+    public double score;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShotVisibility))]
-    public bool showShot = true;
+    public bool showShot;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ShotLeft))]
-    public double x;
+    public double shotSize;
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ShotTop))]
-    public double y;
+    public double X { get; set; }
+    public double Y { get; set; }
 
-    [ObservableProperty]
-    public double scale;
-    
-    public double ShotLeft => X + 250 - ShotSize / 2;
-    public double ShotTop => Y + 250 - ShotSize / 2;
+    [ObservableProperty] public double shotLeft;
+    [ObservableProperty] public double shotTop;
+
     public Visibility ShotVisibility => CalcShotVisibility();
 
     public Brush ShotFill => new SolidColorBrush(ShotColor);
 
     public Brush ShotStroke => new SolidColorBrush(ShotBoarderColor);
     
-    public Thickness ShotStrokeThickness => CalcStrokeThikness();
+    public int ShotZIndex => Number ;
 
     private Visibility CalcShotVisibility()
     {
         if (double.IsNaN(Score)) return Visibility.Hidden;
 
         return ShowShot ? Visibility.Visible : Visibility.Hidden;
-    }
-
-    private Thickness CalcStrokeThikness()
-    {
-        if (!double.IsNaN(ShotBoarder))
-        {
-            return new Thickness(0);
-        }
-
-        return new Thickness(ShotBoarder);
-    }
-
-    partial void OnScoreChanged(double oldValue, double newValue)
-    {
-        ShotChanged?.Invoke(this, EventArgs.Empty);
     }
 }

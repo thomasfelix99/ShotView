@@ -10,9 +10,23 @@
         <shotView:MainWindowViewModel />
     </Window.DataContext>
 
-    <StackPanel Orientation="Vertical">
+    <Grid Name="MainPanel">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel 
+            Grid.Row="0" 
+            Grid.Column="0" 
+            Grid.ColumnSpan="3" 
+            Orientation="Horizontal">
             <Button
                 Padding="20"
                 Margin="20"
@@ -31,6 +45,24 @@
                 Content="Clear" 
                 Command="{Binding ClearShotsCommand}" 
             />
+            <Slider Name ="ScaleSlider"
+                Padding="20"
+                Margin="20"
+                Width="300"
+                Orientation="Horizontal"
+                Minimum="1"
+                Maximum="100"
+                Value="10"
+                SmallChange="1"
+                LargeChange="2"
+                TickFrequency="1"
+                TickPlacement="BottomRight"
+                ValueChanged="Slider_OnValueChanged"
+            />
+            <Label
+                Content="{Binding ElementName=ScaleSlider, Path=Value}"
+                ContentStringFormat="F1"
+                />
         </StackPanel>
 
         <!--<ScrollViewer
@@ -62,20 +94,20 @@
         </ScrollViewer>-->
 
         <shotView:TargetControl
-            HorizontalAlignment="Left"
-            Width="766"
-            Height="484"
-            DataContext="{Binding Target1 }" />
-
-        <Label 
-            Width="700"
-            FontSize="90"
-            FontWeight="Bold"
-            HorizontalAlignment="Left"
-            HorizontalContentAlignment="Center"
-            Content="{Binding Target1Score}" 
-            ContentStringFormat="F1"
+            Grid.Row="1" 
+            Grid.Column="1"
+            DataContext="{Binding Target1 }"
             />
 
-    </StackPanel>
+        <Label Grid.Row="2" 
+               Grid.Column="0"
+               Grid.ColumnSpan="3"
+               FontSize="60"
+               FontWeight="Bold"
+               HorizontalContentAlignment="Center"
+               Content="{Binding Target1Score}" 
+               ContentStringFormat="F1"
+        />
+
+    </Grid>
 </Window>

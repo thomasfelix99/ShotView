@@ -6,35 +6,76 @@
              xmlns:shotView="clr-namespace:Tf.ShotView"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="500">
-    <Grid>
-        <Canvas  x:Name ="Target" />
-        <ItemsControl ItemsSource="{Binding Shots}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+    <Grid
+        Background="{Binding TargetBackground}"
+        ClipToBounds="True">
+        <Canvas>
+            <Canvas.RenderTransform>
+                <ScaleTransform
+                    ScaleX="{Binding Scale}"
+                    ScaleY="{Binding Scale}"
+                    CenterX="{Binding CenterX}"
+                    CenterY="{Binding CenterY}"
+                    />
+            </Canvas.RenderTransform>
 
-            <ItemsControl.ItemContainerStyle>
-                <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding ShotLeft}" />
-                    <Setter Property="Canvas.Top" Value="{Binding ShotTop}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
+            <ItemsControl ItemsSource="{Binding Rings}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Ellipse
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding RingLeft}" />
+                        <Setter Property="Canvas.Top" Value="{Binding RingTop}" />
+                        <Setter Property="Canvas.ZIndex" Value="{Binding RingZIndex}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse
+                        Visibility="Visible"
+                        Height="{Binding RingSize}"
+                        Width="{Binding RingSize}"
+                        Fill="{Binding RingFill}"
+                        Stroke="{Binding RingStroke}"
+                        StrokeThickness="{Binding RingStrokeThickness}"
+                    />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding Shots}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding ShotLeft}" />
+                        <Setter Property="Canvas.Top" Value="{Binding ShotTop}" />
+                        <Setter Property="Canvas.ZIndex" Value="{Binding ShotZIndex}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse
                         Visibility ="{Binding ShotVisibility}"
                         Height="{Binding ShotSize}"
                         Width="{Binding ShotSize}"
                         Fill="{Binding ShotFill}"
                         Stroke="{Binding ShotStroke}"
-                        StrokeThickness="{Binding ShotStrokeThickness}"
+                        StrokeThickness="{Binding ShotBoarderThickness}"
                     />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Canvas>
     </Grid>
 </UserControl>
