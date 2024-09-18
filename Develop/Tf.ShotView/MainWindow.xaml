@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:shotView="clr-namespace:Tf.ShotView"
         mc:Ignorable="d"
         Title="Main Window" Height="800" Width="800">
@@ -31,7 +32,7 @@
                 Padding="20"
                 Margin="20"
                 Content="Add" 
-                Command="{Binding AddTimeTextCommand}" 
+                Command="{Binding AddShotCommand}" 
             />
             <Button
                 Padding="20"
@@ -82,7 +83,9 @@
                 />
         </StackPanel>
 
-        <!--<ScrollViewer
+        <ScrollViewer
+            Grid.Row="1" 
+            Grid.Column="1"
             HorizontalScrollBarVisibility="Auto" 
             VerticalScrollBarVisibility="Disabled">
 
@@ -98,25 +101,60 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <shotView:TargetControl 
-                            Margin="10"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            DataContext="{Binding}" />
+                        <StackPanel>
+                            <shotView:TargetControl 
+                                Width="300"
+                                Height="300"
+                                Margin="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                DataContext="{Binding}" />
+
+                            <Label
+                                FontSize="60"
+                                FontWeight="Bold"
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding LastScore }" 
+                                ContentStringFormat="F1"
+                            />
+
+                            <ListView
+                                Height="500"
+                                BorderThickness="0">
+                                <ListView.Resources>
+                                    <CollectionViewSource x:Key="SortedShots" Source="{Binding Shots}">
+                                        <CollectionViewSource.SortDescriptions>
+                                            <scm:SortDescription PropertyName="Number" Direction="Descending" />
+                                        </CollectionViewSource.SortDescriptions>
+                                    </CollectionViewSource>
+                                </ListView.Resources>
+
+                                <ListView.ItemsSource>
+                                    <Binding Source="{StaticResource SortedShots}" />
+                                </ListView.ItemsSource>
+
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Score}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                        </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
 
             </ItemsControl>
 
-        </ScrollViewer>-->
+        </ScrollViewer>
 
-        <shotView:TargetControl
+        <!--<shotView:TargetControl
             Grid.Row="1" 
             Grid.Column="1"
             DataContext="{Binding Target1 }"
-            />
+            />-->
 
-        <Label Grid.Row="2" 
+        <!--<Label Grid.Row="2" 
                Grid.Column="0"
                Grid.ColumnSpan="3"
                FontSize="60"
@@ -124,7 +162,7 @@
                HorizontalContentAlignment="Center"
                Content="{Binding Target1Score}" 
                ContentStringFormat="F1"
-        />
+        />-->
 
     </Grid>
 </Window>

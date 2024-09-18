@@ -31,6 +31,8 @@ public partial class TargetViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(Scale))]
     [ObservableProperty] public bool autoScale;
 
+    [ObservableProperty] public double lastScore;
+
     public double CenterX => TargetActualWidth / 2;
     public double CenterY => TargetActualHeight / 2;
     public double Scale => AutoScale ? ScaleFromShots() : ManualScale;
@@ -73,7 +75,7 @@ public partial class TargetViewModel : ObservableObject
         Shots.CollectionChanged += ShotsOnCollectionChanged;
     }
 
-    private double Factor => double.Min(TargetActualHeight, TargetActualWidth) / 50;
+    private double Factor => 500 / double.Min(TargetActualHeight, TargetActualWidth);
     
     private void SetRingG10(RingViewModel ring)
     {
@@ -82,8 +84,8 @@ public partial class TargetViewModel : ObservableObject
         ring.BackgroundColor = ring.Score is < 4 or 10 ? Colors.White : Colors.Black;
         ring.RingColor = ring.Score is < 4 or 10 ? Colors.Black : Colors.White;
 
-        ring.RingSize = ringDiameter * Factor;
-        ring.RingStrokeThickness = ring.Score < 10 ? 0.2 * Factor : 0;
+        ring.RingSize = ringDiameter * 10 / Factor;
+        ring.RingStrokeThickness = ring.Score < 10 ? 0.2 * 10 / Factor : 0;
 
         ring.RingLeft = (TargetActualWidth - ring.RingSize) / 2;
         ring.RingTop = (TargetActualHeight - ring.RingSize) / 2;
@@ -91,11 +93,13 @@ public partial class TargetViewModel : ObservableObject
 
     private void SetShotG10(ShotViewModel shot)
     {
-        shot.ShotLeft = TargetActualWidth / 2 + shot.X - shot.ShotSize / 2;
-        shot.ShotTop = TargetActualHeight / 2 + shot.Y - shot.ShotSize / 2;
+        shot.ShotBoarderThickness = 1 / Factor;
+        shot.ShotSize = KaliberG10 * 10 / Factor;
+        shot.ShotLeft = TargetActualWidth / 2 + shot.X * 10 / Factor - shot.ShotSize / 2;
+        shot.ShotTop = TargetActualHeight / 2 + shot.Y * 10 / Factor - shot.ShotSize / 2;
     }
 
-    private static void RunInDispacher(Action action)
+    private static async Task RunInDispacher(Action action)
     {
         if (Application.Current.Dispatcher.CheckAccess())
         {
@@ -103,13 +107,26 @@ public partial class TargetViewModel : ObservableObject
         }
         else
         {
-            Application.Current.Dispatcher.Invoke(action.Invoke);
+            await Application.Current.Dispatcher.BeginInvoke(action.Invoke);
+        }
+    }
+
+    private void UpdateLatestShot()
+    {
+        if (Shots?.Count > 0)
+        {
+            LastScore = Shots.Last().Score;
+        }
+        else
+        {
+            LastScore = double.NaN;
         }
     }
 
     private void ShotsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(Scale));
+        UpdateLatestShot();
     }
 
     private double ScaleFromShots()
@@ -156,20 +173,18 @@ public partial class TargetViewModel : ObservableObject
         }
     }
     
-    public void AddShot(double score, double x, double y)
+    public async Task AddShot(double score, double x, double y)
     {
-        RunInDispacher(() =>
+        await RunInDispacher(() =>
         {
             ShotViewModel shot = new ShotViewModel()
             {
                 Number = Shots!.Count + 1,
                 ShotColor = Colors.White,
                 ShotBoarderColor = Colors.Black,
-                ShotBoarderThickness = 1,
                 Score = score,
                 X = x,
                 Y = y,
-                ShotSize = KaliberG10 * 10,
                 ShowShot = true
             };
             SetShotG10(shot);

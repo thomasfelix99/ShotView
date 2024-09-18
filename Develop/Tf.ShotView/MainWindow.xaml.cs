@@ -15,18 +15,27 @@ public partial class MainWindow : Window
 
     public void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-        if (_viewModel?.Target1 != null)
+        if (_viewModel?.Targets != null)
         {
-            _viewModel.Target1.ManualScale = e.NewValue / 10;
+            foreach (TargetViewModel target in _viewModel.Targets)
+            {
+                target.ManualScale = e.NewValue / 10;
+            }
         }
     }
     public void ShotSizeSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-        if (_viewModel?.Target1?.Shots?.Count > 0)
+        if (_viewModel?.Targets != null)
         {
-            foreach (ShotViewModel shot in _viewModel.Target1.Shots)
+            foreach (TargetViewModel target in _viewModel.Targets)
             {
-                shot.ShotSize = e.NewValue;
+                if (target.Shots?.Count > 0)
+                {
+                    foreach (ShotViewModel shot in target.Shots)
+                    {
+                        shot.ShotSize = e.NewValue;
+                    }
+                }
             }
         }
     }
