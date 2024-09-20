@@ -14,7 +14,7 @@ namespace Tf.ShotView
             SizeChanged += OnSizeChanged;
         }
 
-        private TargetViewModel? _viewModel => DataContext as TargetViewModel;
+        private ViewModels.TargetViewModel? _viewModel => DataContext as ViewModels.TargetViewModel;
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {

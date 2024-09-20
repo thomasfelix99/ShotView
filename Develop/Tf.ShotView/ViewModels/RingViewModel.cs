@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Tf.ShotView;
+namespace Tf.ShotView.ViewModels;
 
 public partial class RingViewModel : ObservableObject
 {

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Tf.ShotView;
+namespace Tf.ShotView.Views;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -11,13 +11,13 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
-    private MainWindowViewModel? _viewModel => DataContext as MainWindowViewModel;
+    private ViewModels.MainWindowViewModel? _viewModel => DataContext as ViewModels.MainWindowViewModel;
 
     public void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         if (_viewModel?.Targets != null)
         {
-            foreach (TargetViewModel target in _viewModel.Targets)
+            foreach (ViewModels.TargetViewModel target in _viewModel.Targets)
             {
                 target.ManualScale = e.NewValue / 10;
             }
@@ -27,11 +27,11 @@ public partial class MainWindow : Window
     {
         if (_viewModel?.Targets != null)
         {
-            foreach (TargetViewModel target in _viewModel.Targets)
+            foreach (ViewModels.TargetViewModel target in _viewModel.Targets)
             {
                 if (target.Shots?.Count > 0)
                 {
-                    foreach (ShotViewModel shot in target.Shots)
+                    foreach (ViewModels.ShotViewModel shot in target.Shots)
                     {
                         shot.ShotSize = e.NewValue;
                     }

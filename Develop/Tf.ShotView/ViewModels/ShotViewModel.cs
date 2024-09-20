@@ -2,12 +2,10 @@
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Tf.ShotView;
+namespace Tf.ShotView.ViewModels;
 
 public partial class ShotViewModel : ObservableObject
 {
-    public EventHandler? ShotChanged;
-
     [NotifyPropertyChangedFor(nameof(ShotZIndex))]
     [ObservableProperty] public int number;
 

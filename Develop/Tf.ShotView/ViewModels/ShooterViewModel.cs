@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Tf.ShotView;
+namespace Tf.ShotView.ViewModels;
 
-[INotifyPropertyChanged]
-public partial class ShooterViewModel
+public partial class ShooterViewModel : ObservableObject
 {
     [ObservableProperty] private string? name;
 }

@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace Tf.ShotView;
+namespace Tf.ShotView.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {

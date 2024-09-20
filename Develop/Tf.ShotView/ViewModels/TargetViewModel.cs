@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Tf.ShotView;
+namespace Tf.ShotView.ViewModels;
 
 public partial class TargetViewModel : ObservableObject
 {
@@ -113,14 +113,7 @@ public partial class TargetViewModel : ObservableObject
 
     private void UpdateLatestShot()
     {
-        if (Shots?.Count > 0)
-        {
-            LastScore = Shots.Last().Score;
-        }
-        else
-        {
-            LastScore = double.NaN;
-        }
+        LastScore = Shots?.Count > 0 ? Shots.Last().Score : double.NaN;
     }
 
     private void ShotsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
