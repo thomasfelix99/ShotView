@@ -11,7 +11,9 @@ public partial class TargetViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(TargetBackground))]
     [ObservableProperty] public Color backgroundColor;
 
-    [ObservableProperty] public int targetNumber;
+    [ObservableProperty] public int laneNumber;
+
+    [ObservableProperty] public ShooterViewModel? shooter;
 
     [ObservableProperty] public ObservableCollection<ShotViewModel>? shots;
 
@@ -33,6 +35,8 @@ public partial class TargetViewModel : ObservableObject
 
     [ObservableProperty] public double lastScore;
 
+    [ObservableProperty] public bool isEnabled;
+
     public double CenterX => TargetActualWidth / 2;
     public double CenterY => TargetActualHeight / 2;
     public double Scale => AutoScale ? ScaleFromShots() : ManualScale;
@@ -51,9 +55,10 @@ public partial class TargetViewModel : ObservableObject
     private void InitializeTarget()
     {
         BackgroundColor = Colors.LightYellow;
-        TargetNumber = 0;
+        LaneNumber = 0;
         ManualScale = 1;
         AutoScale = false;
+        IsEnabled = true;
     }
 
     private void InitializeRings()

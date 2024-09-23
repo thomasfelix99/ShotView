@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -15,8 +16,9 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty] public ObservableCollection<TargetViewModel>? targets = new();
 
     [RelayCommand]
-    public async Task UpdateTimeText()
+    public void UpdateTimeText()
     {
+        Targets[0].IsEnabled = !Targets[0].IsEnabled;
         //await UpdateText();
     }
 
@@ -44,7 +46,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             Targets?.Add(new TargetViewModel()
             {
-                TargetNumber = i
+                LaneNumber = i
             });
         }
     }
@@ -52,7 +54,7 @@ public partial class MainWindowViewModel : ObservableObject
     private async Task AddTestShot()
     {
         TestData.TestShot shot = TestData.NextShot();
-        TargetViewModel? target = Targets?.FirstOrDefault(t => t.TargetNumber == shot.TargetNr);
+        TargetViewModel? target = Targets?.FirstOrDefault(t => t.LaneNumber == shot.TargetNr);
         await target!.AddShot(shot.Score, shot.X, shot.Y);
     }
 }

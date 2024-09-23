@@ -21,9 +21,8 @@ internal static class TestData
         return Shots[idx];
     }
 
-    private static readonly List<TestShot> Shots = new List<TestShot>()
+    private static readonly List<TestShot> Shots = new ()
     {
-        new() { TargetNr = 1, Score = 10.9, X = 0, Y = 0 },
         new() { TargetNr = 1, Score = 9.1, X = 2.64371, Y = -3.79727 },
         new() { TargetNr = 2, Score = 5.9, X = 10.51955, Y = 7.00189 },
         new() { TargetNr = 3, Score = 9.4, X = 3.05522, Y = -2.44362 },
@@ -76,7 +75,7 @@ internal static class TestData
         new() { TargetNr = 2, Score = 8.1, X = 2.19465, Y = 6.76166 },
         new() { TargetNr = 3, Score = 8.1, X = 1.88463, Y = 6.90532 },
         new() { TargetNr = 4, Score = 8.6, X = -3.55559, Y = 4.68583 },
-        new() { TargetNr = 5, Score = 6.1, X = -12.01423, Y = 0.38851 },
+        new() { TargetNr = 5, Score = 6.1, X = -12.01423, Y = 0.38851 }
     };
 
 }

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Tf.ShotView
+namespace Tf.ShotView.Controls
 {
     /// <summary>
     /// Interaktionslogik für Target.xaml
