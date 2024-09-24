@@ -37,9 +37,14 @@ public partial class TargetViewModel : ObservableObject
 
     [ObservableProperty] public bool isEnabled;
 
+    [NotifyPropertyChangedFor(nameof(Visible))]
+    [ObservableProperty] public bool isVisible;
+
     public double CenterX => TargetActualWidth / 2;
     public double CenterY => TargetActualHeight / 2;
     public double Scale => AutoScale ? ScaleFromShots() : ManualScale;
+
+    public Visibility Visible => IsVisible ? Visibility.Visible : Visibility.Collapsed;
 
     private const double KaliberG10 = 4.5;
 
@@ -59,6 +64,7 @@ public partial class TargetViewModel : ObservableObject
         ManualScale = 1;
         AutoScale = false;
         IsEnabled = true;
+        IsVisible = true;
     }
 
     private void InitializeRings()

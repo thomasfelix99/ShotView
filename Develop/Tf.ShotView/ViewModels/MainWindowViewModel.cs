@@ -1,31 +1,62 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Tf.ShotView.Models;
+using Tf.ShotView.Models.Db;
+using Tf.ShotView.Models.Services;
 
 namespace Tf.ShotView.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    public MainWindowViewModel()
+    private readonly IDbService _db;
+
+    public MainWindowViewModel(IDbService dbService)
     {
         InitializeTargets();
+        _db = dbService;
     }
 
     [ObservableProperty] public string? timeText;
-    [ObservableProperty] public ObservableCollection<TargetViewModel>? targets = new();
+    [ObservableProperty] public ObservableCollection<TargetViewModel>? targets = null;
 
     [RelayCommand]
     public void UpdateTimeText()
     {
-        Targets[0].IsEnabled = !Targets[0].IsEnabled;
+        Targets![0].IsEnabled = !Targets[0].IsEnabled;
         //await UpdateText();
+    }
+
+    private string CreatePasseId(int day, int lane, int passeNr)
+    {
+        return $"{day}-{lane:D3}-{passeNr:D3}";
     }
 
     [RelayCommand]
     public async Task AddShot()
     {
-        await AddTestShot();
+        foreach (int day in await _db.SelectDays())
+        {
+            foreach (int lane in await _db.SelectLanes(day))
+            {
+                int passeNr = 1;
+                string passeId = CreatePasseId(day, lane, passeNr);
+
+                IList<RawShot> shots = await _db.GetRawShotsByLaneAndDay(day, lane);
+
+                foreach (RawShot shot in shots)
+                {
+                    shot.PasseId = passeId;
+                    if (shot.TotalArt != 0)
+                    {
+                        passeNr += 1;
+                        passeId = CreatePasseId(day, lane, passeNr);
+                    }
+                }
+
+                await _db.UpdateRawShots(shots);
+            }
+        }
     }
 
     [RelayCommand]
@@ -42,6 +73,8 @@ public partial class MainWindowViewModel : ObservableObject
 
     private void InitializeTargets()
     {
+        Targets = new ObservableCollection<TargetViewModel>();
+        
         for (int i = 1; i <= 6; i++)
         {
             Targets?.Add(new TargetViewModel()
@@ -49,12 +82,5 @@ public partial class MainWindowViewModel : ObservableObject
                 LaneNumber = i
             });
         }
-    }
-
-    private async Task AddTestShot()
-    {
-        TestData.TestShot shot = TestData.NextShot();
-        TargetViewModel? target = Targets?.FirstOrDefault(t => t.LaneNumber == shot.TargetNr);
-        await target!.AddShot(shot.Score, shot.X, shot.Y);
     }
 }

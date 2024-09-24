@@ -3,17 +3,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tf.ShotView.Models.Db;
 
-internal class RawShot
+public class RawShot
 {
     [Key]
     [Description("ID")]
     public string ShootId { get; set; } = string.Empty;
 
+    [Description("ID der Passe")]
+    public string PasseId { get; set; } = string.Empty;
+
     [Description("Anlage (SVMG10 / SVMG50 / SVMG300 ...)")]
     public string? Anlage { get; set; }
 
-    [Description("StartTag im Format YYYYMMDD")]
-    public string? Day { get; set; }
+    [Description("StartTag im Format YYYYMMDD als Zahl")]
+    public int Day { get; set; }
 
     [Description("Mit der Startnummer ist der Schütze eindeutig identifiziert")]
     public int StartNr { get; set; }

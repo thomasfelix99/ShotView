@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Tf.ShotView.Models\Tf.ShotView.Models.csproj" />
+		<ProjectReference Include="..\Tf.ShotView.Services.Db\Tf.ShotView.Services.Db.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

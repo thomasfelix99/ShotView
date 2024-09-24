@@ -5,12 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:controls="clr-namespace:Tf.ShotView.Controls"
-        xmlns:viewModels="clr-namespace:Tf.ShotView.ViewModels"
         mc:Ignorable="d"
         Title="Main Window" Height="800" Width="800">
-    <Window.DataContext>
-        <viewModels:MainWindowViewModel />
-    </Window.DataContext>
 
     <Grid Name="MainPanel">
         <Grid.ColumnDefinitions>
@@ -88,7 +84,8 @@
             Grid.Row="1" 
             Grid.Column="1"
             HorizontalScrollBarVisibility="Auto" 
-            VerticalScrollBarVisibility="Disabled">
+            VerticalScrollBarVisibility="Disabled"
+            Visibility="Hidden">
 
             <ItemsControl 
                 ItemsSource="{Binding Targets}"

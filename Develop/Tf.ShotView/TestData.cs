@@ -1,7 +1,53 @@
-﻿namespace Tf.ShotView;
+﻿using Tf.ShotView.Models.Db;
+
+namespace Tf.ShotView;
 
 internal static class TestData
 {
+    private static RawShot CreateRawShot(DateTime day, string csvString)
+    {
+        var fields = csvString.Split(';');
+
+        var rs = new RawShot()
+        {
+            Anlage = "SVMG10",
+            Day = int.Parse($"{day:yyyyMMdd}"),
+            StartNr = int.Parse(fields[0]),
+            PrimaryScore = double.Parse(fields[1]),
+            Schussart = int.Parse(fields[2]),
+            BahnNr = int.Parse(fields[3]),
+            SecondaryScore = double.Parse(fields[4]),
+            Teiler = int.Parse(fields[5]),
+            Zeit = day.Date.Add(DateTime.Parse(fields[6]).TimeOfDay),
+            Mouche = int.Parse(fields[7]),
+            X = double.Parse(fields[8]),
+            Y = double.Parse(fields[9]),
+            InTime = int.Parse(fields[10]),
+            TimeSinceChange = double.Parse(fields[11]),
+            SweepDirection = int.Parse(fields[12]),
+            Demonstration = int.Parse(fields[13]),
+            Match = int.Parse(fields[14]),
+            Stich = int.Parse(fields[15]),
+            InsDel = int.Parse(fields[16]),
+            TotalArt = int.Parse(fields[17]),
+            Gruppe = int.Parse(fields[18]),
+            Feuerart = int.Parse(fields[19]),
+            LogEvent = int.Parse(fields[20]),
+            LogTyp = int.Parse(fields[21]),
+            TimeStamp = long.Parse(fields[22]),
+            Ablösung = int.Parse(fields[23]),
+            Waffe = int.Parse(fields[24]),
+            Position = int.Parse(fields[25]),
+            TargetID = fields[26],
+            ExterneNummer = fields[27]
+        };
+
+        rs.ShootId = $"{rs.Anlage}-{rs.BahnNr:D3}-{rs.LogEvent:D5}-{rs.TimeStamp:D10}-{rs.Teiler:D6}";
+
+        return rs;
+    }
+    
+
     public class TestShot
     {
         public int TargetNr { get; set; }
