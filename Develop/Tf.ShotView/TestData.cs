@@ -1,9 +1,28 @@
-﻿using Tf.ShotView.Models.Db;
+﻿using System.Runtime.CompilerServices;
+using Tf.ShotView.Models.Db;
+using Tf.ShotView.Models.Services;
 
 namespace Tf.ShotView;
 
 internal static class TestData
 {
+    public static void InsertFromSiusData(IDbService db, string siusCsvFile)
+    {
+        List<RawShot> rawShots = new List<RawShot>();
+        
+        foreach (var line in System.IO.File.ReadAllLines(siusCsvFile))
+        {
+            var fields = line.Split(';');
+
+            DateTime day = (new DateTime(2024, 1, 1)).AddMilliseconds(long.Parse(fields[22])*10).Date;
+
+            rawShots.Add(CreateRawShot(day, line));
+        }
+
+        db.AddRawShots(rawShots);
+    }
+
+
     private static RawShot CreateRawShot(DateTime day, string csvString)
     {
         var fields = csvString.Split(';');

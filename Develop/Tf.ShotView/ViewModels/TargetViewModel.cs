@@ -40,6 +40,8 @@ public partial class TargetViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(Visible))]
     [ObservableProperty] public bool isVisible;
 
+    [ObservableProperty] public bool useShotColors;
+
     public double CenterX => TargetActualWidth / 2;
     public double CenterY => TargetActualHeight / 2;
     public double Scale => AutoScale ? ScaleFromShots() : ManualScale;
@@ -176,7 +178,25 @@ public partial class TargetViewModel : ObservableObject
             }
         }
     }
-    
+
+    private Color CalcShotColor(double score)
+    {
+        if (!UseShotColors)
+        {
+            return Colors.White;
+        }
+
+        if (score >= 10)
+        {
+            return Colors.Tomato;
+        }
+        if (score >= 9)
+        {
+            return Colors.Yellow;
+        }
+        return Colors.Blue;
+    }
+
     public async Task AddShot(double score, double x, double y)
     {
         await RunInDispacher(() =>
@@ -184,7 +204,7 @@ public partial class TargetViewModel : ObservableObject
             ShotViewModel shot = new ShotViewModel()
             {
                 Number = Shots!.Count + 1,
-                ShotColor = Colors.White,
+                ShotColor = CalcShotColor(score),
                 ShotBoarderColor = Colors.Black,
                 Score = score,
                 X = x,

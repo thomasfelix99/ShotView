@@ -85,7 +85,7 @@
             Grid.Column="1"
             HorizontalScrollBarVisibility="Auto" 
             VerticalScrollBarVisibility="Disabled"
-            Visibility="Hidden">
+            Visibility="Visible">
 
             <ItemsControl 
                 ItemsSource="{Binding Targets}"

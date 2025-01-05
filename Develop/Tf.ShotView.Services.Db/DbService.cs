@@ -66,6 +66,13 @@ public class DbService : IDbService
             .ToListAsync();
     }
 
+    public async Task<IList<RawShot>> GetRawShotsByPasseId(string passeId)
+    {
+        return await _db.RawShots!
+            .Where(r => r.PasseId.Equals(passeId))
+            .ToListAsync();
+    }
+
     public async Task<IList<int>> SelectDays()
     {
         return await _db.RawShots!
@@ -85,10 +92,11 @@ public class DbService : IDbService
 
     public async Task<IList<Passe>> SelectPassen(int day)
     {
-        return await _db.RawShots
-            .Where(r => r.Day == day)
-            .GroupBy(r => r.PasseId)
-            .Distinct()
+        //return await _db.RawShots
+        //    .Where(r => r.Day == day)
+        //    .GroupBy(r => r.PasseId)
+        //    .Distinct();
+
         throw new NotImplementedException();
     }
 

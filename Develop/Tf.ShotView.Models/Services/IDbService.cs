@@ -6,7 +6,8 @@ public interface IDbService
 {
     Task<RawShot?> GetRawShot(string id);
     Task<IList<RawShot>> GetRawShotsByLaneAndDay(int day, int lane);
-    
+    Task<IList<RawShot>> GetRawShotsByPasseId(string passeId);
+
     Task<int> AddRawShot(RawShot rawShot);
     Task<int> AddRawShots(IList<RawShot> rawShots);
     
